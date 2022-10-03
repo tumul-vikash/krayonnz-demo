@@ -18,7 +18,6 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getNewsData());
-    console.log('hello world');
   }, [dispatch]);
 
   return (
@@ -28,43 +27,60 @@ const Home = () => {
           style={styles.input}
           placeholder={'Search'}
           onChangeText={query => {
-            setSearchArray(NewsData.filter(item => item.content.search(query)));
-            console.log(SearchArray);
+            setSearchArray(NewsData.filter(item => item.title.search(query)));
+            console.log(SearchArray, query);
           }}
         />
       </View>
-      <ScrollView
-        style={{
-          backgroundColor: '#dfdfdf',
-        }}>
-        {SearchArray === []
-          ? SearchArray.map((item, index) => {
-              if (index < 10) {
-                return (
-                  <NewsCard
-                    data={item}
-                    key={index}
-                    containerStyle={{
-                      marginBottom: index === 9 ? 16 : 0,
-                    }}
-                  />
-                );
-              }
-            })
-          : NewsData.map((item, index) => {
-              if (index < 10) {
-                return (
-                  <NewsCard
-                    data={item}
-                    key={index}
-                    containerStyle={{
-                      marginBottom: index === 9 ? 16 : 0,
-                    }}
-                  />
-                );
-              }
-            })}
-      </ScrollView>
+      {SearchArray.length > 0 ? (
+        <Text
+          style={{
+            backgroundColor: '#dfdfdf',
+            marginHorizontal: 8,
+            color: '#242626',
+            fontSize: 16,
+            fontWeight: '500',
+          }}>
+          Search Results:{' '}
+        </Text>
+      ) : null}
+      {SearchArray.length > 0 ? (
+        <ScrollView
+          style={{
+            backgroundColor: '#dfdfdf',
+          }}>
+          {SearchArray.map((item, index) => {
+            return (
+              <NewsCard
+                data={item}
+                key={index}
+                containerStyle={{
+                  marginBottom: index === SearchArray.length - 1 ? 16 : 0,
+                }}
+              />
+            );
+          })}
+        </ScrollView>
+      ) : (
+        <ScrollView
+          style={{
+            backgroundColor: '#dfdfdf',
+          }}>
+          {NewsData.map((item, index) => {
+            if (index < 10) {
+              return (
+                <NewsCard
+                  data={item}
+                  key={index}
+                  containerStyle={{
+                    marginBottom: index === 9 ? 16 : 0,
+                  }}
+                />
+              );
+            }
+          })}
+        </ScrollView>
+      )}
     </>
   );
 };
